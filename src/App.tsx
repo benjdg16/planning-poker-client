@@ -1,34 +1,49 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 
-// const socket = io("localhost:6010");
-
 function App() {
-	const id = useRef(`${Date.now()}`);
-	const editor = useRef<any>(null);
-	const remote = useRef(false);
+	const [testMsg, setTestMsg] = useState<string>();
+	const inputRef = useRef<HTMLInputElement>(null);
+
+	const socket = io("localhost:6010", {
+		transports: ["websocket", "polling", "flashsocket"],
+	});
 
 	useEffect(() => {
-		const socket = io("localhost:6010", {
-			transports: ["websocket", "polling", "flashsocket"],
-		});
 		console.log(`init client`);
-		socket.emit("init", "world");
-		socket.on("inits", (x: any) => console.log(x));
-		// socket.on(
-		// 	"new-operations",
-		// 	({ editorId, ops }: { editorId: string; ops: string }) => {
-		// 		if (id.current !== editorId) {
-		// 			remote.current = true;
-		// 			JSON.parse(ops).forEach((ops: any) =>
-		// 				editor.current!.applyOperation(ops)
-		// 			);
-		// 			remote.current = false;
-		// 		}
-		// 	}
-		// );
+
+		// const socket = io("https://planning-poker-server-fhnd.onrender.com/", {
+		// 	transports: ["websocket", "polling", "flashsocket"],
+		// });
+
+		socket.on("init", () => {
+			return String(`User: ${Date.now()}`);
+		});
+
+		socket.on("message", (msg: string) => {
+			console.log(`hello ${msg}`);
+			setTestMsg(msg);
+		});
 	}, []);
-	return <div className="App">Hello world!</div>;
+
+	const handleSubmit = () => {
+		if (inputRef.current) {
+			const msg = inputRef.current?.value;
+			console.log(msg);
+			socket.emit("message", msg);
+
+			inputRef.current.value = "";
+		}
+	};
+
+	return (
+		<div className="App">
+			Hello world!
+			<input ref={inputRef} type="text" />
+			<button onClick={handleSubmit}>Send</button>
+			<h1>{`received message: ${testMsg}`}</h1>
+		</div>
+	);
 }
 
 export default App;
