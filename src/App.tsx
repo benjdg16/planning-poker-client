@@ -5,16 +5,16 @@ function App() {
 	const [testMsg, setTestMsg] = useState<string>();
 	const inputRef = useRef<HTMLInputElement>(null);
 
-	const socket = io("localhost:6010", {
+	// const socket = io("localhost:6010", {
+	// 	transports: ["websocket", "polling", "flashsocket"],
+	// });
+
+	const socket = io("https://planning-poker-server-fhnd.onrender.com/", {
 		transports: ["websocket", "polling", "flashsocket"],
 	});
 
 	useEffect(() => {
 		console.log(`init client`);
-
-		// const socket = io("https://planning-poker-server-fhnd.onrender.com/", {
-		// 	transports: ["websocket", "polling", "flashsocket"],
-		// });
 
 		socket.on("init", () => {
 			return String(`User: ${Date.now()}`);
