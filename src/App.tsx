@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 
+import { DEFAULT_CARDS } from "./constants/card";
+import Game from "./pages/Game";
+
 function App() {
 	const [testMsg, setTestMsg] = useState<string>();
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -42,6 +45,9 @@ function App() {
 			<input ref={inputRef} type="text" />
 			<button onClick={handleSubmit}>Send</button>
 			<h1>{`received message: ${testMsg}`}</h1>
+			{DEFAULT_CARDS.FIBONACCI.values && (
+				<Game cardValues={DEFAULT_CARDS.FIBONACCI.values} />
+			)}
 		</div>
 	);
 }
