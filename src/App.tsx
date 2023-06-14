@@ -41,10 +41,10 @@ function App() {
 
 	return (
 		<div className="App">
-			Hello world!
+			{/* Hello world!
 			<input ref={inputRef} type="text" />
 			<button onClick={handleSubmit}>Send</button>
-			<h1>{`received message: ${testMsg}`}</h1>
+			<h1>{`received message: ${testMsg}`}</h1> */}
 			{DEFAULT_CARDS.FIBONACCI.values && (
 				<Game cardValues={DEFAULT_CARDS.FIBONACCI.values} />
 			)}
